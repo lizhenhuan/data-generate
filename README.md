@@ -2,6 +2,8 @@ build from source:
 
 mvn clean package
 
+this command will generate target/data-generate-1.0-SNAPSHOT.jar
+
 
 generate data to mysql or tidb
 
