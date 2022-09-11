@@ -39,13 +39,15 @@ public class ColumnInfo {
         this.extra = extra;
         this.maxLength = maxLength;
         this.isNullable = isNullable;
-        if (getDataType().contains("int") || getDataType().contains("decimal")) {
+        if (getDataType().contains("tinyint")) {
             this.handleType = 1;
-        } else if (getDataType().contains("char") || getDataType().contains("text")) {
+        } else if (getDataType().contains("int") || getDataType().contains("decimal")) {
             this.handleType = 2;
+        } else if (getDataType().contains("char") || getDataType().contains("text")) {
+            this.handleType = 3;
             this.handleMaxLength = UUID_LENGTH > (int)maxLength ? (int)maxLength : UUID_LENGTH;
         } else if (getDataType().contains("date")) {
-            this.handleType = 3;
+            this.handleType = 4;
         } else {
             throw new Exception("unknow type " + getDataType());
         }
@@ -57,15 +59,36 @@ public class ColumnInfo {
     public void setPreparedStatement(PreparedStatement ps, int index, Random random) throws Exception {
         switch (handleType) {
             case 1:
-                ps.setInt(index, random.nextInt(100000000));
+                ps.setInt(index, random.nextInt(100));
                 break;
             case 2:
-                ps.setString(index, UUID.randomUUID().toString().substring(0, handleMaxLength - 1));
+                ps.setInt(index, random.nextInt(100000000));
                 break;
             case 3:
+                ps.setString(index, UUID.randomUUID().toString().substring(0, handleMaxLength - 1));
+                break;
+            case 4:
                 ps.setDate(index, new Date(millSecond - random.nextInt(100000000)));
                 break;
         }
+    }
+
+    public String generateRelationColumnSQL(String sourceColumn, String relationTable, String relationColumn) throws Exception {
+        Random random = new Random();
+        if (sourceColumn.equals(columnName)) {
+            return relationTable + "." + relationColumn + " as " + columnName + " ,";
+        }
+        switch (handleType) {
+            case 1:
+                return random.nextInt(100) + " as " + columnName + " ,";
+            case 2:
+                return random.nextInt(1000000) + " as " + columnName + " ,";
+            case 3:
+                return " left(uuid()," + maxLength +" ) as " + columnName + " ,";
+            case 4:
+                return " '2022-09-10 23:25:34' as " + columnName + ",";
+        }
+        throw new Exception("Unknow handle type");
     }
 
     public String getExtra() {

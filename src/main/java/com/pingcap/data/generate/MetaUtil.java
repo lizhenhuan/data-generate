@@ -55,6 +55,18 @@ public class MetaUtil {
         return stringBuilder.append(stringBuilder2).toString();
     }
 
+    public static String generateRelationInsertSQL(List<ColumnInfo> columnInfoList, String dbName, String tableName, String sourceColumn, String relationTable, String relationColumn) throws Exception {
+        StringBuilder stringBuilder = new StringBuilder(String.format("insert into %s.%s select ", dbName, tableName));
+        for (ColumnInfo columnInfo : columnInfoList) {
+            stringBuilder.append(columnInfo.generateRelationColumnSQL(sourceColumn, relationTable, relationColumn));
+        }
+        stringBuilder.setLength(stringBuilder.length() - 1);
+
+        stringBuilder.append(" from ").append(relationTable);
+
+        return stringBuilder.toString();
+    }
+
 
     private static ColumnInfo convert(ResultSet rs) throws Exception {
 
