@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class DataGenerate {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataGenerate.class);
     private static int THREAD_NUM;
-    private static int TOTAL_SIZE;
+    private static Long TOTAL_SIZE;
     private static String IP_PORT;
     private static String USER;
     private static String PASSWORD;
@@ -30,7 +30,7 @@ public class DataGenerate {
         parseArgs(args);
 
         String driver = "com.mysql.jdbc.Driver";
-        String url = String.format("jdbc:mysql://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true", IP_PORT, DB_NAME);
+        String url = String.format("jdbc:mysql:loadbalance://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true", IP_PORT, DB_NAME);
 
         try {
             Class.forName(driver);
@@ -92,7 +92,7 @@ public class DataGenerate {
     private static void parseArgs(String [] args) {
         if (args.length == 7) {
             THREAD_NUM = Integer.parseInt(args[0]);
-            TOTAL_SIZE = Integer.parseInt(args[1]);
+            TOTAL_SIZE = Long.parseLong(args[1]);
             IP_PORT = args[2];
             USER = args[3];
             PASSWORD = args[4];

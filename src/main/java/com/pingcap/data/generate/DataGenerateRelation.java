@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class DataGenerateRelation {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataGenerateRelation.class);
     private static int THREAD_NUM;
-    private static int TOTAL_SIZE;
+    private static Long TOTAL_SIZE;
     private static String IP_PORT;
     private static String USER;
     private static String PASSWORD;
@@ -35,7 +35,7 @@ public class DataGenerateRelation {
         parseArgs(args);
 
         String driver = "com.mysql.jdbc.Driver";
-        String url = String.format("jdbc:mysql://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&sessionVariables=tidb_dml_batch_size=1000&sessionVariables=tidb_batch_insert=1", IP_PORT, DB_NAME);
+        String url = String.format("jdbc:mysql:loadbalance://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&sessionVariables=tidb_dml_batch_size=500&sessionVariables=tidb_batch_insert=1", IP_PORT, DB_NAME);
 
         try {
             Class.forName(driver);
@@ -44,6 +44,10 @@ public class DataGenerateRelation {
             List<Connection> connectionList = new ArrayList<>();
             for (int i = 0; i < THREAD_NUM; i++) {
                 Connection connection = DriverManager.getConnection(url, USER, PASSWORD);
+                PreparedStatement preparedStatement1 = connection.prepareStatement("set tidb_dml_batch_size=500 ");
+                preparedStatement1.execute();
+                PreparedStatement preparedStatement2 = connection.prepareStatement("set tidb_batch_insert=1 ");
+                preparedStatement2.execute();
                 connectionList.add(connection);
             }
             List<ColumnInfo> columnInfoList = MetaUtil.getMeta(connectionList.get(0), DB_NAME, TABLE_NAME);
@@ -55,7 +59,7 @@ public class DataGenerateRelation {
                 executorService.execute(
                         () -> {
                             try {
-                                insertData(connection, insertSQL, columnInfoList);
+                                insertData(connection, insertSQL);
                             } catch (Exception e) {
                                 LOGGER.error("send message error", e);
                             } finally {
@@ -77,7 +81,7 @@ public class DataGenerateRelation {
             LOGGER.error("error happen here,", e);
         }
     }
-    private static void insertData(Connection connection, String sql, List<ColumnInfo> columnInfoList) throws Exception {
+    private static void insertData(Connection connection, String sql) throws Exception {
         try (PreparedStatement ps = connection.prepareStatement(sql);) {
             for (int count = 0; count < TOTAL_SIZE / THREAD_NUM / RELATION_TABLE_COUNT; count ++) {
                 ps.execute();
@@ -101,7 +105,7 @@ public class DataGenerateRelation {
     private static void parseArgs(String [] args) {
         if (args.length == 10) {
             THREAD_NUM = Integer.parseInt(args[0]);
-            TOTAL_SIZE = Integer.parseInt(args[1]);
+            TOTAL_SIZE = Long.parseLong(args[1]);
             IP_PORT = args[2];
             USER = args[3];
             PASSWORD = args[4];
