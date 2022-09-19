@@ -90,7 +90,7 @@ public class DataGenerate {
     }
 
     private static void parseArgs(String [] args) {
-        if (args.length == 7) {
+        if (args.length == 7 || args.length == 8) {
             THREAD_NUM = Integer.parseInt(args[0]);
             TOTAL_SIZE = Long.parseLong(args[1]);
             IP_PORT = args[2];
@@ -98,8 +98,11 @@ public class DataGenerate {
             PASSWORD = args[4];
             DB_NAME = args[5];
             TABLE_NAME = args[6];
+            if (args[7] != null && args.length > 0) {
+                BATCH_SIZE = Integer.parseInt(args[7]);
+            }
         } else {
-            LOGGER.error("please input 7 args: THREAD_NUM TOTAL_SIZE  IP_PORT USER PASSWORD  DB_NAME TABLE_NAME ");
+            LOGGER.error("please input 7 args: THREAD_NUM TOTAL_SIZE  IP_PORT USER PASSWORD  DB_NAME TABLE_NAME (BATCH_SIZE) ");
             System.exit(1);
         }
     }
