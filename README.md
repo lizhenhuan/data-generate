@@ -11,7 +11,9 @@ This command will generate target/data-generate-1.0-SNAPSHOT.jar
 
 Generate data to mysql or tidb
 
-java -Xms2048m -Xmx2048m -cp ~/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.DataGenerate THREAD_NUM TOTAL_SIZE  IP_PORT USER PASSWORD  DB_NAME TABLE_NAME 
+java -Xms2048m -Xmx2048m -cp ~/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.DataGenerate THREAD_NUM TOTAL_SIZE  IP_PORT USER PASSWORD  DB_NAME TABLE_NAME (BATCH_SIZE)
+
+BATCH_SIZE can be null with default value 500 
 
 Example :
 
