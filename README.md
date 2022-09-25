@@ -33,3 +33,8 @@ then generate relation table by main table:
 java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.DataGenerateRelation THREAD_NUM TOTAL_SIZE  IP_PORT USER PASSWORD  DB_NAME TABLE_NAME SOURCE_COLUMN RELATION_TABLE RELATION_COLUMN
 java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.DataGenerateRelation 10 2000000 172.16.4.137:4000 root 'xxx!@#' test t_order u_id t_user id
 
+
+Generate table data by insert insert sql:
+java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.DataGenerateBySQL THREAD_NUM TOTAL_SIZE  IP_PORT USER PASSWORD  DB_NAME SQL ONCE_INSERT_COUNT
+
+
