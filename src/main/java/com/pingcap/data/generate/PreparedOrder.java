@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.*;
 
 public class PreparedOrder {
 
@@ -92,7 +93,7 @@ public class PreparedOrder {
                 LOGGER.info("ps5 cost:" + (end5 - end4));
                 ps6.execute();
                 Long end6 = System.currentTimeMillis();
-                LOGGER.info("ps5 cost:" + (end6 - end5));
+                LOGGER.info("ps6 cost:" + (end6 - end5));
             }
         } catch (Exception e) {
             LOGGER.error("error happen here,", e);
