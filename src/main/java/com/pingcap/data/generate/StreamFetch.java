@@ -21,7 +21,7 @@ public class StreamFetch {
 
         try {
             Class.forName(driver);
-            String sql = String.format("select * from %s.%s", DB_NAME, TABLE_NAME);
+            String sql = String.format("select * from %s.%s order by k", DB_NAME, TABLE_NAME);
             try (Connection connection = DriverManager.getConnection(url, USER, PASSWORD)) {
                  Statement stmt = connection.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY,
                          java.sql.ResultSet.CONCUR_READ_ONLY);
@@ -39,7 +39,7 @@ public class StreamFetch {
                      stringBuilder.setLength(0);
                  }
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 LOGGER.error("error happen here,", e);
             }
         } catch (Exception e) {

@@ -30,7 +30,7 @@ public class DataGenerate {
         parseArgs(args);
 
         String driver = "com.mysql.jdbc.Driver";
-        String url = String.format("jdbc:mysql:loadbalance://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true", IP_PORT, DB_NAME);
+        String url = String.format("jdbc:mysql://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true", IP_PORT, DB_NAME);
 
         try {
             Class.forName(driver);
