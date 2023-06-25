@@ -33,7 +33,7 @@ public class TestPreparedMultiple {
         System.out.println(data.size());
 
         String driver = "com.mysql.jdbc.Driver";
-        String url = String.format("jdbc:mysql://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&useServerPrepStmts=true&cachePrepStmts=true&useConfigs=maxPerformance", IP_PORT, DB_NAME);
+        String url = String.format("jdbc:mysql://%s/%s?useUnicode=true&characterEncoding=utf-8&useSSL=false&rewriteBatchedStatements=true&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=1000&prepStmtCacheSqlLimit=20480&useConfigs=maxPerformance", IP_PORT, DB_NAME);
 
         try {
             Class.forName(driver);
@@ -94,15 +94,16 @@ public class TestPreparedMultiple {
     private static void query(Connection connection, List<String> data, int index) throws Exception {
         int start = data.size() / THREAD_NUM * (index - 1);
         int end = data.size() / THREAD_NUM * index;
+        for (int j = 0; j < 30; j++) {
+            for (int i = start; i < end; i++) {
+                try (PreparedStatement ps = connection.prepareStatement(SQL)) {
+                    ps.setString(1, data.get(i));
+                    ResultSet resultSet = ps.executeQuery();
+                    while (resultSet.next()) {
 
-        for (int i = start; i < end; i++) {
-            try (PreparedStatement ps =  connection.prepareStatement(SQL)) {
-                ps.setString(1, data.get(i));
-                ResultSet resultSet = ps.executeQuery();
-                while (resultSet.next()) {
-
+                    }
+                    TOTAL_SIZE.addAndGet(1);
                 }
-                TOTAL_SIZE.addAndGet(1);
             }
         }
     }

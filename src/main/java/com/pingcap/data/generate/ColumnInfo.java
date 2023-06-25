@@ -39,7 +39,7 @@ public class ColumnInfo {
         this.extra = extra;
         this.maxLength = maxLength;
         this.isNullable = isNullable;
-        if (getDataType().contains("tinyint")) {
+        if (getDataType().contains("tinyint") || getDataType().contains("smallint")) {
             this.handleType = 1;
         } else if (getDataType().contains("int") || getDataType().contains("decimal")) {
             this.handleType = 2;
@@ -48,6 +48,8 @@ public class ColumnInfo {
             this.handleMaxLength = UUID_LENGTH > (int)maxLength ? (int)maxLength : UUID_LENGTH;
         } else if (getDataType().contains("date")) {
             this.handleType = 4;
+        } else if (getDataType().contains("double")) {
+            this.handleType = 5;
         } else {
             throw new Exception("unknow type " + getDataType());
         }
@@ -69,6 +71,9 @@ public class ColumnInfo {
                 break;
             case 4:
                 ps.setDate(index, new Date(millSecond - random.nextInt(100000000)));
+                break;
+            case 5:
+                ps.setDouble(index, random.nextDouble());
                 break;
         }
     }

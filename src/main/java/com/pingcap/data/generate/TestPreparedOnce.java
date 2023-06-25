@@ -92,13 +92,15 @@ public class TestPreparedOnce {
         int start = data.size() / THREAD_NUM * (index - 1);
         int end = data.size() / THREAD_NUM * index;
         try (PreparedStatement ps =  connection.prepareStatement(SQL)) {
-            for (int i = start; i < end; i++) {
-                ps.setString(1, data.get(i));
-                ResultSet resultSet = ps.executeQuery();
-                while (resultSet.next()) {
+            for (int j = 0; j < 30; j++) {
+                for (int i = start; i < end; i++) {
+                    ps.setString(1, data.get(i));
+                    ResultSet resultSet = ps.executeQuery();
+                    while (resultSet.next()) {
 
+                    }
+                    TOTAL_SIZE.addAndGet(1);
                 }
-                TOTAL_SIZE.addAndGet(1);
             }
         }
     }
