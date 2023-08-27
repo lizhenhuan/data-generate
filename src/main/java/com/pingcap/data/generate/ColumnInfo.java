@@ -2,6 +2,7 @@ package com.pingcap.data.generate;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.util.Random;
 import java.util.UUID;
 
@@ -50,6 +51,8 @@ public class ColumnInfo {
             this.handleType = 4;
         } else if (getDataType().contains("double")) {
             this.handleType = 5;
+        } else if (getDataType().contains("timestamp")) {
+            this.handleType = 6;
         } else {
             throw new Exception("unknow type " + getDataType());
         }
@@ -74,6 +77,9 @@ public class ColumnInfo {
                 break;
             case 5:
                 ps.setDouble(index, random.nextDouble());
+                break;
+            case 6:
+                ps.setTimestamp(index, new Timestamp(new Date(millSecond - random.nextInt(100000000)).getTime()));
                 break;
         }
     }
