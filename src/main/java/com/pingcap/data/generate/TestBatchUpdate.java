@@ -21,7 +21,7 @@ public class TestBatchUpdate {
     public static void main(String[] args) {
         parseArgs(args);
         String driver = "com.mysql.jdbc.Driver";
-        String url = String.format("jdbc:mysql://%s/test?&rewriteBatchedStatements=true&allowMultiQueries=false&useServerPrepStmts=true&prepStmtCacheSqlLimit=65536&cachePrepStmts=true&zeroDateTimeBehavior=convertToNull&useSSL=false&&useConfigs=maxPerformance", IP_PORT);
+        String url = String.format("jdbc:mysql://%s/test?&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&prepStmtCacheSqlLimit=65536&cachePrepStmts=true&zeroDateTimeBehavior=convertToNull&useSSL=false&&useConfigs=maxPerformance", IP_PORT);
 
         try {
             Class.forName(driver);
