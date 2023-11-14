@@ -98,7 +98,7 @@ public class DataGenerate {
             PASSWORD = args[4];
             DB_NAME = args[5];
             TABLE_NAME = args[6];
-            if (args[7] != null && args[7].length() > 0) {
+            if (args.length >= 8) {
                 BATCH_SIZE = Integer.parseInt(args[7]);
             }
         } else {
