@@ -67,10 +67,10 @@ public class ColumnInfo {
                 ps.setInt(index, random.nextInt(100));
                 break;
             case 2:
-                ps.setInt(index, random.nextInt(100000000));
+                ps.setInt(index, random.nextInt(9998));
                 break;
             case 3:
-                ps.setString(index, UUID.randomUUID().toString().substring(0, handleMaxLength - 1));
+                ps.setString(index, UUID.randomUUID().toString().substring(0, handleMaxLength - 1 > 0 ? handleMaxLength - 1 : 0));
                 break;
             case 4:
                 ps.setDate(index, new Date(millSecond - random.nextInt(100000000)));
