@@ -39,12 +39,38 @@ public class MetaUtil {
         return columnInfoList;
     }
 
+//    public static List<String> getDBTables(Connection connection, String dbName) throws Exception {
+//        List<String> tableNameList = new ArrayList<>();
+//        try (PreparedStatement ps =  connection.prepareStatement(String.format(QUERY_COLUMN, dbName, tableName));
+//             PreparedStatement psCreateTable =  connection.prepareStatement(String.format(QUERY_CREATE_TABLE, dbName, tableName));
+//             ResultSet rs = ps.executeQuery();
+//             ResultSet rsCreateTable = psCreateTable.executeQuery()) {
+//            boolean isAutoRandom = false;
+//            while (rsCreateTable.next()) {
+//                String createTableSQL = rsCreateTable.getString(2);
+//                if (createTableSQL.contains("[auto_rand]")) {
+//                    isAutoRandom = true;
+//                }
+//            }
+//            while (rs.next()) {
+//                ColumnInfo columnInfo = convert(rs);
+//                // auto_increment or auto_random should not add to list
+//                if (("PRI".equals(columnInfo.getColumnKey()) && isAutoRandom) || "auto_increment".equals(columnInfo.getExtra())) {
+//                    continue;
+//                } else {
+//                    columnInfoList.add(columnInfo);
+//                }
+//            }
+//        }
+//        return columnInfoList;
+//    }
+
     public static String generateInsertSQL(List<ColumnInfo> columnInfoList, String dbName, String tableName) {
         StringBuilder stringBuilder = new StringBuilder(String.format("insert into %s.%s (", dbName, tableName));
         StringBuilder stringBuilder2 = new StringBuilder();
         for (ColumnInfo columnInfo : columnInfoList) {
             if (!"auto_increment".equals(columnInfo.getExtra())) {
-                stringBuilder.append(columnInfo.getColumnName()).append(",");
+                stringBuilder.append("`").append(columnInfo.getColumnName()).append("`,");
                 stringBuilder2.append("?,");
             }
         }

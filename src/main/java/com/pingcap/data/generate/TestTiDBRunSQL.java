@@ -9,8 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Date;
 
-public class TestOracleRunSQL {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestOracleRunSQL.class);
+public class TestTiDBRunSQL {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestTiDBRunSQL.class);
     private static String IP_PORT;
     private static String USER;
     private static String PASSWORD;
@@ -18,11 +18,10 @@ public class TestOracleRunSQL {
     private static String SQL;
     private static Connection connection;
 
-
     public static void main(String[] args) {
         parseArgs(args);
-        String driver = "oracle.jdbc.OracleDriver";
-        String url = String.format("jdbc:oracle:thin:@172.xx.xx.xx:1521:xxdb");
+        String driver = "com.mysql.jdbc.Driver";
+        String url = String.format("jdbc:mysql://%s/%s?&zeroDateTimeBehavior=convertToNull&useSSL=false&&useConfigs=maxPerformance&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&prepStmtCacheSqlLimit=65536&cachePrepStmts=true", IP_PORT, DB);
 
         try {
             Class.forName(driver);
@@ -57,13 +56,14 @@ public class TestOracleRunSQL {
         }
     }
     private static void parseArgs(String [] args) {
-        if (args.length == 3) {
-            USER = args[0];
-            PASSWORD = args[1];
-            SQL = args[2];
-            System.out.println(String.format("%s + %s + %s",USER, PASSWORD, SQL));
+        if (args.length == 5) {
+            IP_PORT = args[0];
+            USER = args[1];
+            PASSWORD = args[2];
+            DB = args[3];
+            SQL = args[4];
         } else {
-            LOGGER.error("please input 3 args:  USER PASSWORD  SQL");
+            LOGGER.error("please input 5 args: IP_PORT USER PASSWORD DB SQL");
             System.exit(1);
         }
     }

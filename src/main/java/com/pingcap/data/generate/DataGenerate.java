@@ -30,7 +30,7 @@ public class DataGenerate {
         parseArgs(args);
 
         String driver = "com.mysql.jdbc.Driver";
-        String url = String.format("jdbc:mysql://%s/%s?useUnicode=true&useSSL=false&useServerPrepStmts=true&prepStmtCacheSqlLimit=65536000&prepStmtCacheSize=2000&allowMultiQueries=true&cachePrepStmts=true&rewriteBatchedStatements=true&useConfigs=maxPerformance", IP_PORT, DB_NAME);
+        String url = String.format("jdbc:mysql://%s/%s?useUnicode=true&useSSL=false&useServerPrepStmts=true&prepStmtCacheSqlLimit=655360&prepStmtCacheSize=2000&allowMultiQueries=true&cachePrepStmts=true&rewriteBatchedStatements=true&useConfigs=maxPerformance", IP_PORT, DB_NAME);
 
         try {
             Class.forName(driver);
@@ -72,7 +72,7 @@ public class DataGenerate {
             LOGGER.error("error happen here,", e);
         }
     }
-    private static void insertData(Connection connection, String sql, List<ColumnInfo> columnInfoList) throws Exception {
+    public static void insertData(Connection connection, String sql, List<ColumnInfo> columnInfoList) throws Exception {
         Random random = new Random();
         try (PreparedStatement ps =  connection.prepareStatement(sql);) {
             for (int count = 0; count < TOTAL_SIZE / THREAD_NUM / BATCH_SIZE; count ++) {

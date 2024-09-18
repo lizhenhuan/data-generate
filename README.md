@@ -37,4 +37,3 @@ java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.DataGen
 Generate table data by insert insert sql:
 java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.DataGenerateBySQL THREAD_NUM TOTAL_SIZE  IP_PORT USER PASSWORD  DB_NAME SQL ONCE_INSERT_COUNT
 
-
