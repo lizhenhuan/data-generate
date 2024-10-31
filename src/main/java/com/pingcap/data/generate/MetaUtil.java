@@ -81,6 +81,22 @@ public class MetaUtil {
         return stringBuilder.append(stringBuilder2).toString();
     }
 
+    public static String generateReplaceSQL(List<ColumnInfo> columnInfoList, String dbName, String tableName) {
+        StringBuilder stringBuilder = new StringBuilder(String.format("replace into %s.%s (", dbName, tableName));
+        StringBuilder stringBuilder2 = new StringBuilder();
+        for (ColumnInfo columnInfo : columnInfoList) {
+            if (!"auto_increment".equals(columnInfo.getExtra())) {
+                stringBuilder.append("`").append(columnInfo.getColumnName()).append("`,");
+                stringBuilder2.append("?,");
+            }
+        }
+        stringBuilder.setLength(stringBuilder.length() - 1);
+        stringBuilder2.setLength(stringBuilder2.length() - 1);
+        stringBuilder.append(") values (");
+        stringBuilder2.append(")");
+        return stringBuilder.append(stringBuilder2).toString();
+    }
+
     public static String generateRelationInsertSQL(List<ColumnInfo> columnInfoList, String dbName, String tableName, String sourceColumn, String relationTable, String relationColumn) throws Exception {
         StringBuilder stringBuilder = new StringBuilder(String.format("insert into %s.%s ( ", dbName, tableName));
         StringBuilder stringBuilderSelect = new StringBuilder(" select ");
