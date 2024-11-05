@@ -15,22 +15,23 @@ public class TestAddBatch {
     private static String USER;
     private static String PASSWORD;
     private static String DB;
+    private static int BATCH_SIZE;
     private static Connection connection;
 
     public static void main(String[] args) {
         parseArgs(args);
         String driver = "com.mysql.jdbc.Driver";
-        String url = String.format("jdbc:mysql://%s/%s?&zeroDateTimeBehavior=convertToNull&useSSL=false&&useConfigs=maxPerformance&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&prepStmtCacheSqlLimit=2147483640&cachePrepStmts=true", IP_PORT, DB);
+        String url = String.format("jdbc:mysql://%s/%s?&zeroDateTimeBehavior=convertToNull&useSSL=false&&useConfigs=maxPerformance&rewriteBatchedStatements=true&allowMultiQueries=true&useServerPrepStmts=true&prepStmtCacheSqlLimit=2147483640&cachePrepStmts=true&prepStmtCacheSize=2000", IP_PORT, DB);
 
         try {
             Class.forName(driver);
             connection = DriverManager.getConnection(url, USER, PASSWORD);
 
 
-            executeBatchReplaceSQL(100);
-            executeBatchReplaceSQL(100);
-            executeBatchReplaceSQL(100);
-            executeBatchReplaceSQL(100);
+            executeBatchReplaceSQL(BATCH_SIZE);
+            executeBatchReplaceSQL(BATCH_SIZE);
+            executeBatchReplaceSQL(BATCH_SIZE);
+            executeBatchReplaceSQL(BATCH_SIZE);
 
 
             //executeReplaceSQL();
@@ -85,11 +86,12 @@ public class TestAddBatch {
     }
 
     private static void parseArgs(String [] args) {
-        if (args.length == 4) {
+        if (args.length == 5) {
             IP_PORT = args[0];
             USER = args[1];
             PASSWORD = args[2];
             DB = args[3];
+            BATCH_SIZE = Integer.parseInt(args[4]);
         } else {
             LOGGER.error("please input 5 args: IP_PORT USER PASSWORD DB SQL");
             System.exit(1);
