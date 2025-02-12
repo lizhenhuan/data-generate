@@ -3,6 +3,7 @@ package com.pingcap.data.generate;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -86,7 +87,7 @@ public class ColumnInfo {
 
     public String generateRelationColumnSQL(String sourceColumn, String relationTable, String relationColumn) throws Exception {
         Random random = new Random();
-        if (sourceColumn.equals(columnName)) {
+        if (sourceColumn.toLowerCase(Locale.ROOT).equals(columnName.toLowerCase(Locale.ROOT))) {
             return relationTable + "." + relationColumn + " as " + columnName + " ,";
         }
         switch (handleType) {
