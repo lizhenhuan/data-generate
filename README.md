@@ -95,6 +95,6 @@ job_code int,
 store_id int NOT NULL
 ) PARTITION BY RANGE (id) INTERVAL (100) FIRST PARTITION LESS THAN (100) LAST PARTITION LESS THAN (10000) MAXVALUE PARTITION;
 
-run TestCurrencyDDL:
-java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.TestCurrencyDDL  THREAD_NUM  IP_PORT USER PASSWORD  DB_NAME
-example: java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.TestCurrencyDDL  4 127.0.0.1:4000 root root test
+run TestCurrencyDDL:<br>
+java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.TestCurrencyDDL  THREAD_NUM  IP_PORT USER PASSWORD  DB_NAME<br>
+example: java -cp target/data-generate-1.0-SNAPSHOT.jar com.pingcap.data.generate.TestCurrencyDDL  4 127.0.0.1:4000 root root test<br>
