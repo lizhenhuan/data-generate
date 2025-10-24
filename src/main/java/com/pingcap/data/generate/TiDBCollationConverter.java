@@ -13,8 +13,8 @@ public class TiDBCollationConverter {
     private static String PASSWORD;
     private static String DB_NAME;
     // 目标字符集和排序规则
-    private static final String TARGET_CHARSET = "utf8mb4";
-    private static final String TARGET_COLLATION = "utf8mb4_general_ci";
+    private static String TARGET_CHARSET = "utf8mb4";
+    private static String TARGET_COLLATION = "utf8mb4_general_ci";
 
     static class ColumnInfo {
         String tableSchema;
@@ -55,13 +55,17 @@ public class TiDBCollationConverter {
         }
     }
     private static void parseArgs(String [] args) {
-        if (args.length == 4) {
+        if (args.length >= 4) {
             IP_PORT = args[0];
             USER = args[1];
             PASSWORD = args[2];
             DB_NAME = args[3];
+            if (args.length == 6) {
+                TARGET_CHARSET = args[4];
+                TARGET_COLLATION = args[5];
+            }
         } else {
-            LOGGER.error("please input 4 args: IP_PORT USER PASSWORD DB_NAME ");
+            LOGGER.error("please input 4 args: IP_PORT USER PASSWORD DB_NAME (TARGET_CHARSET) (TARGET_COLLATION)");
             System.exit(1);
         }
     }
@@ -176,6 +180,18 @@ public class TiDBCollationConverter {
                     } catch (SQLException e) {
                         System.err.println("Error recreating index " + indexInfo.indexName + " on " + tableName + ": " + e.getMessage());
                     }
+                }
+                try (Statement stmt = conn.createStatement()) {
+                    String alterTableCHARSETSQL =  String.format("alter table %s CHARSET=", tableName, TARGET_CHARSET);
+                    String alterTableCOLLATESQL =  String.format("alter table %s COLLATE=", tableName, TARGET_COLLATION);
+
+                    System.out.println(alterTableCHARSETSQL);
+                    System.out.println(alterTableCOLLATESQL);
+
+                    stmt.execute(alterTableCHARSETSQL);
+                    stmt.execute(alterTableCOLLATESQL);
+                } catch (SQLException e) {
+                    System.err.println("Error alter table " + tableName + " COLLATE " +  ": " + e.getMessage());
                 }
             }
             conn.commit();
