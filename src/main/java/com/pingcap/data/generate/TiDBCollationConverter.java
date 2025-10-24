@@ -182,8 +182,8 @@ public class TiDBCollationConverter {
                     }
                 }
                 try (Statement stmt = conn.createStatement()) {
-                    String alterTableCHARSETSQL =  String.format("alter table %s CHARSET=", tableName, TARGET_CHARSET);
-                    String alterTableCOLLATESQL =  String.format("alter table %s COLLATE=", tableName, TARGET_COLLATION);
+                    String alterTableCHARSETSQL =  String.format("alter table %s CHARSET=%s", tableName, TARGET_CHARSET);
+                    String alterTableCOLLATESQL =  String.format("alter table %s COLLATE=%s", tableName, TARGET_COLLATION);
 
                     System.out.println(alterTableCHARSETSQL);
                     System.out.println(alterTableCOLLATESQL);
